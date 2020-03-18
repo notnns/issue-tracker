@@ -29,6 +29,14 @@ const closeIssue = id => {
   fetchIssues();
 }
 
+const reOpenIssue = id => {
+  const issues = JSON.parse(localStorage.getItem('issues'));
+  const currentIssue = issues.find(issue => issue.id === id);
+  currentIssue.status = 'Open';
+  localStorage.setItem('issues', JSON.stringify(issues));
+  fetchIssues();
+}
+
 const deleteIssue = id => {
   const issues = JSON.parse(localStorage.getItem('issues'));
   const remainingIssues = issues.filter(issue => issue.id !== id);
@@ -46,10 +54,9 @@ const fetchIssues = () => {
   for (var i = 0; i < issues.length; i++) {
     const { id, description, severity, assignedTo, status } = issues[i];
 
-    if (issues[i].status == "Open") { openIssueCount++; }
-    else if (issues[i].status == "Closed") { closeIssueCount++; }
-
-    issuesList.innerHTML += `<div class="well">
+    if (issues[i].status == "Open") {
+      openIssueCount++;
+      issuesList.innerHTML += `<div class="well">
                               <h6>Issue ID: ${id} </h6>
                               <p><span class="label label-info"> ${status} </span></p>
                               <h3> ${description} </h3>
@@ -58,6 +65,23 @@ const fetchIssues = () => {
                               <a href="#" onclick="closeIssue(${id})" class="btn btn-warning">Close</a>
                               <a href="#" onclick="deleteIssue(${id})" class="btn btn-danger">Delete</a>
                               </div>`;
+
+
+    }
+    else if (issues[i].status == "Closed") {
+      closeIssueCount++;
+      issuesList.innerHTML += `<div class="well">
+                              <h6>Issue ID: ${id} </h6>
+                              <p><span class="label label-danger"> ${status} </span></p>
+                              <h3 class="kete-dilam"> ${description} </h3>
+                              <p><span class="glyphicon glyphicon-time"></span> ${severity}</p>
+                              <p><span class="glyphicon glyphicon-user"></span> ${assignedTo}</p>
+                              <a href="#" onclick="reOpenIssue(${id})" class="btn btn-success">Re-Open</a>
+                              <a href="#" onclick="deleteIssue(${id})" class="btn btn-danger">Delete</a>
+                              </div>`;
+    }
+
+    
   }
 
 
