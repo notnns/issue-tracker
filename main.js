@@ -7,18 +7,28 @@ function submitIssue(e) {
   const assignedTo = getInputValue('issueAssignedTo');
   const id = Math.floor(Math.random() * 100000000);
   const status = 'Open';
-
-  const issue = { id, description, severity, assignedTo, status };
-  let issues = [];
-  if (localStorage.getItem('issues')) {
-    issues = JSON.parse(localStorage.getItem('issues'));
+  if (description == "") {
+    alert("Description is empty");
   }
-  issues.push(issue);
-  localStorage.setItem('issues', JSON.stringify(issues));
+  else if (assignedTo == "") {
+    alert("Assign the issue to someone.");
+  }
 
-  document.getElementById('issueInputForm').reset();
-  fetchIssues();
-  e.preventDefault();
+  else{
+    const issue = { id, description, severity, assignedTo, status };
+    let issues = [];
+    if (localStorage.getItem('issues')) {
+      issues = JSON.parse(localStorage.getItem('issues'));
+    }
+    issues.push(issue);
+    localStorage.setItem('issues', JSON.stringify(issues));
+  
+    document.getElementById('issueInputForm').reset();
+    fetchIssues();
+    e.preventDefault();
+  }
+
+
 }
 
 const closeIssue = id => {
@@ -81,7 +91,7 @@ const fetchIssues = () => {
                               </div>`;
     }
 
-    
+
   }
 
 
